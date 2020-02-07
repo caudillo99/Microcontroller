@@ -3,7 +3,7 @@
 ;----- Insert EQU and = equates here
 locals
 .data
-  new_line DB 10,13,0
+  newline DB  10,13,0
 .code
   org 100h
 
@@ -12,7 +12,27 @@ locals
   ;***********************************************
         main            proc
                         mov sp, 0fffh       ; inicializa SP
-                        mov ax, -1234       ; numero a invertir
+
+                      @@here:
+                        call getch
+                        mov ax, 123        ; numero a invertir
+                        call printNumBase   ; print the number in AX
+
+                        push ax             ; save temporary AX onto stack
+                        mov al,'-'
+                        call putchar
+                        mov al,'>'
+                        call putchar
+                        pop ax              ; remove AX from the stack
+
+                        call reverse        ; call the reverse procedure, which flips a number that was stored in AX
+                        mov ax,dx           ; the procedure returns in DX the flipped number.
+                        call printNumBase
+                        ;*****************************************************************************************
+                        call getch
+                        mov dx, offset newline
+                        call puts
+                        mov ax, -12        ; numero a invertir
                         call printNumBase   ; print the number in AX
                         push ax             ; save temporary AX onto stack
                         mov al,'-'
@@ -22,8 +42,41 @@ locals
                         pop ax              ; remove AX from the stack
                         call reverse        ; call the reverse procedure, which flips a number that was stored in AX
                         mov ax,dx           ; the procedure returns in DX the flipped number.
-                        call printNumBase   ; print the flipped number
-                      @@here:               ; the program never ends
+                        call printNumBase
+                        ;*****************************************************************************************
+                        call getch
+                        mov dx, offset newline
+                        call puts
+                        mov ax, 120        ; numero a invertir
+                        call printNumBase   ; print the number in
+                        push ax             ; save temporary AX onto stack
+                        mov al,'-'
+                        call putchar
+                        mov al,'>'
+                        call putchar
+                        pop ax              ; remove AX from the stack
+                        call reverse        ; call the reverse procedure, which flips a number that was stored in AX
+                        mov ax,dx           ; the procedure returns in DX the flipped number.
+                        call printNumBase
+                        ;*****************************************************************************************
+                        call getch
+                        mov dx, offset newline
+                        call puts
+                        mov ax, 12345        ; numero a invertir
+                        call printNumBase   ; print the number in
+                        push ax             ; save temporary AX onto stack
+                        mov al,'-'
+                        call putchar
+                        mov al,'>'
+                        call putchar
+                        pop ax              ; remove AX from the stack
+                        call reverse        ; call the reverse procedure, which flips a number that was stored in AX
+                        mov ax,dx           ; the procedure returns in DX the flipped number.
+                        call printNumBase
+                        mov dx, offset newline
+                        call puts
+                        call puts
+                        call clrsc
                         jmp @@here
                         ret
                         endp
@@ -35,30 +88,43 @@ locals
                         push bx             ; save the register
                         push ax
                         push cx
+                        push si
+                        xor si,si
+                        ;push ax
+                        ;mov al,'X'
+                        ;call putchar
+                        ;pop ax
                         test ax,8000h       ; check if the number is negative
                         jns @@no_sign       ; if No Sign flag is activated then jumps to convert the number
+                        mov si, 1           ; flag is activated if there's negative number
                         xor ax, 0FFFFh      ; if the number is negative,
                         inc ax              ; we're gonna apply the 2's complements
                       @@no_sign:
+                        xor dx,dx           ; **SOLUCION!!!!!!** HABER INICIALIZADO DX EN 0
                         xor cx,cx           ; we're gonna take CX as auxiliary
                         mov bx,10           ; BX is the multiplier and divider
                       @@proc1:
-                        idiv bx             ; we divide the number in 10, then we're use
+                        div bx             ; we divide the number in 10, then we're use
                         add cx, dx
                         xor dx, dx
                         cmp cx, 7fffh     ; check if the number is greater than the maximum capacity of the signed 16-bits register
                         jo @@overflow
-                        cmp ax,0          
+                        cmp ax,0
                         je @@end
                         push ax
                         mov ax, cx
-                        imul bx
+                        mul bx
                         mov cx,ax
                         pop ax
                         jmp @@proc1
                       @@end:
                         mov dx, cx
+                        cmp si,0
+                        jz @@overflow
+                        xor dx, 0FFFFh      ; if the number is negative,
+                        inc dx
                       @@overflow:
+                        pop si
                         pop cx
                         pop ax
                         pop bx
@@ -147,4 +213,13 @@ locals
                       	pop  ax
                       	ret
                       	endp
+
+                clrsc   proc
+                        push ax
+                        mov al,07h
+                        mov ah, 05h
+                        int 10h
+                        pop ax
+                        ret
+                        endp
 END main
