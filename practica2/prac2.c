@@ -1,42 +1,182 @@
-void putchar( char dato );
-void puts( char *str );
-char getch( void );
-void printdec(unsigned char dato );
-char msg[]="Hola UABC\r\n";
-unsigned char i=0;
+/*AMS routines*/
+extern void putchar(char dato);
+extern char getchar(void);
+/*C functions*/
+void gets(char *str);
+void puts(char *str);
+void itoa(unsigned int number, char *str, unsigned char base);
+unsigned int atoi(char *str);
+unsigned char doomsday(unsigned int year);
+unsigned char anchor_day(unsigned int year);
+unsigned int substr(char *str, unsigned char init, unsigned char end);
+unsigned char leap_year(unsigned int year);
+unsigned char specific_day(unsigned int year, unsigned char month, unsigned char day);
+char *day[] = {"Domingo", "Lunes", "Martes", "Miercoles",
+                "Jueves", "Viernes", "Sabado"
+              };
+char *month[] = {
+                "Enero","Febrero", "Marzo", "Abril",
+                "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre","Octubre", "Noviembre", "Diciembre"
+              };
+unsigned char weekday[] = {3,28,7,4,9,6,11,8,5,10,7,12};
+unsigned char doomsdays_year[] = {2,0,5,3};
+unsigned char c;
 
-int main ( void ){
+void main ( void ){
+  char input[12];
+  char x[5];
   while(1){
-      printdec(i++);
-      puts( msg );
-      getch();
+    puts("Date: ");
+    gets(input);
+    puts(day[specific_day(substr(input,6,9),substr(input,3,4),substr(input,0,1))]);
+    putchar(' ');
+    itoa(substr(input,0,1),x,10);
+    puts(x);
+    puts(" de ");
+    puts(month[substr(input,3,4)-1]);
+    puts(" del anio ");
+    itoa(substr(input,6,9),x,10);
+    puts(x);
+    putchar('\n');
+    getchar();
   }
-  return 0;
 }
 
-void puts ( char *str ){
-  while( *str )
-    putchar( *str++ );
-}
-void putchar ( char dato ){
-  asm mov dl,dato
-  asm mov ah,2
-  asm int 21h
+void gets(char *str){
+  const unsigned char limit = 21;
+  const char *const aux = str;
+  c=getchar();
+
+  while (c != 13) {
+    if (c == 8) {
+      if (str != aux) {
+        putchar(' ');
+        putchar(c);
+        str--;
+      }
+      else putchar(' ');
+    }
+    else if(str >= aux+limit-1){
+      putchar(8);
+      putchar(' ');
+      putchar(8);
+    }
+    else
+      *(str++) = c;
+    c = getchar();
+  }
+  *str = '\0';
 }
 
-char getch( void )
-{
-  char dato;
-  asm mov ah,8
-  asm int 21h
-  asm mov dato,al
-  return dato;
+void puts(char *str){
+  while (*str) {
+    putchar(*(str++));
+  }
 }
 
-void printdec ( unsigned char dato )
-{
-  putchar( dato/100 + 0x30 );
-  dato%=100;
-  putchar( dato/10 + 0x30 );
-  putchar( dato%10 + 0x30 );
+void itoa(unsigned int number, char *str, unsigned char base){
+  unsigned char aux,i=0;
+  char str_aux[16];
+  while (number) {
+    aux = number%base;
+    number /= base;
+    str_aux[i] = (aux<10) ? aux+'0' : aux+'A'-10;
+    i++;
+  }
+  while (i) {
+    *(str++) = str_aux[i-1];
+    i--;
+  }
+  *str='\0';
+}
+
+unsigned int atoi(char *str){
+  unsigned int num=0;
+  while (*str) {
+    num*=10;
+    num+=((*str++)-'0');
+  }
+  return num;
+}
+
+/*Return the Doomsday of given a year*/
+unsigned char doomsday(unsigned int year){
+  unsigned char dooms = 0, two_dig;
+  two_dig = (year%100) ;
+  dooms = (two_dig / 12);
+  dooms += (two_dig - (dooms*12));
+  dooms += (two_dig % 12) / 4;
+  dooms += doomsdays_year[anchor_day(year)];
+  while (dooms >= 7) {
+    dooms -= 7;
+  }
+  return dooms;
+}
+
+/* Return the century anchor day*/
+unsigned char anchor_day(unsigned int year){
+	unsigned int remainder = year%400;
+	if(remainder < 100)
+    remainder = 0;
+	else if(remainder < 200)
+    remainder = 1;
+	else if(remainder < 300)
+    remainder = 2;
+	else
+    remainder = 3;
+  return remainder;
+}
+
+/*Convert string to integer with a given index value*/
+
+unsigned int substr(char *str, unsigned char init, unsigned char end ){
+  char aux[6],i=0;
+  while (init+i <= end) {
+    aux[i] = *(str+init+i);
+    i++;
+  }
+  aux[i] = '\0';
+  return (atoi(aux));
+}
+
+unsigned char leap_year(unsigned int year){
+  unsigned char leap;
+  if (year % 4 == 0) {
+    if (year % 100 == 0) {
+      if (year % 400 == 0)
+        leap = 1;
+      else
+        leap = 0;
+    }else
+      leap = 1;
+    }
+  else
+    leap = 0;
+  return leap;
+}
+
+unsigned char specific_day(unsigned int year, unsigned char month, unsigned char day){
+  unsigned char dday = doomsday(year), aux = weekday[month-1];
+  if(month==2 || month==1){
+    if (leap_year(year))
+      aux++;
+  }
+  if(day > dday){
+    while (aux < day) {
+      dday++;
+      aux++;
+      if (dday > 6)
+        dday = 0;
+    }
+  }
+  else{
+    while (aux > day) {
+      dday--;
+      aux--;
+      if (dday < 0)
+        dday = 6;
+    }
+  }
+  return dday;
 }
