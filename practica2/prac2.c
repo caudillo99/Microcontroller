@@ -11,6 +11,7 @@ unsigned char anchor_day(unsigned int year);
 unsigned int substr(char *str, unsigned char init, unsigned char end);
 unsigned char leap_year(unsigned int year);
 unsigned char specific_day(unsigned int year, unsigned char month, unsigned char day);
+void clrstr(char *str);
 char *day[] = {"Domingo", "Lunes", "Martes", "Miercoles",
                 "Jueves", "Viernes", "Sabado"
               };
@@ -26,20 +27,31 @@ unsigned char c;
 void main ( void ){
   char input[12];
   char x[5];
+  unsigned char cur_day;
   while(1){
     puts("Date: ");
     gets(input);
-    puts(day[specific_day(substr(input,6,9),substr(input,3,4),substr(input,0,1))]);
-    putchar(' ');
-    itoa(substr(input,0,1),x,10);
-    puts(x);
-    puts(" de ");
-    puts(month[substr(input,3,4)-1]);
-    puts(" del anio ");
-    itoa(substr(input,6,9),x,10);
-    puts(x);
+    cur_day = specific_day(substr(input,6,9),substr(input,3,4),substr(input,0,1));
+    if(cur_day != 10){
+      puts(day[cur_day]);
+      putchar(' ');
+      itoa(substr(input,0,1),x,10);
+      puts(x);
+      puts(" de ");
+      puts(month[substr(input,3,4)-1]);
+      puts(" del anio ");
+      itoa(substr(input,6,9),x,10);
+      puts(x);
+    }else
+      puts("Fecha invalida!");
+    clrstr(x);
     putchar('\n');
     getchar();
+  }
+}
+void clrstr(char* str){
+  while (*str) {
+    *(str++) = 0;
   }
 }
 
@@ -159,7 +171,10 @@ unsigned char leap_year(unsigned int year){
 unsigned char specific_day(unsigned int year, unsigned char month, unsigned char day){
   unsigned char dday = doomsday(year), aux = weekday[month-1];
   if(month==2 || month==1){
-    if (leap_year(year))
+    if (!leap_year(year)){
+      if(day > 28)
+        return (10);      /*date doesn't exist*/
+    }else
       aux++;
   }
   if(day > dday){
@@ -170,13 +185,14 @@ unsigned char specific_day(unsigned int year, unsigned char month, unsigned char
         dday = 0;
     }
   }
-  else{
+  else if(day < dday){
     while (aux > day) {
       dday--;
       aux--;
       if (dday < 0)
         dday = 6;
     }
-  }
+  }else
+    dday=day;
   return dday;
 }
