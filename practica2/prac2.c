@@ -10,6 +10,7 @@ unsigned char doomsday(unsigned int year);
 unsigned char anchor_day(unsigned int year);
 unsigned int substr(char *str, unsigned char init, unsigned char end);
 unsigned char leap_year(unsigned int year);
+unsigned char check_lastday(unsigned int year, unsigned char month, unsigned char day);
 unsigned char specific_day(unsigned int year, unsigned char month, unsigned char day);
 void clrstr(char *str);
 char *day[] = {"Domingo", "Lunes", "Martes", "Miercoles",
@@ -20,6 +21,10 @@ char *month[] = {
                 "Mayo", "Junio", "Julio", "Agosto",
                 "Septiembre","Octubre", "Noviembre", "Diciembre"
               };
+unsigned char lastday_month[] = { 31, 28, 31, 30,
+                                  31, 30, 31, 31,
+                                  30, 31, 30, 31
+                                };
 unsigned char weekday[] = {3,28,7,4,9,6,11,8,5,10,7,12};
 unsigned char doomsdays_year[] = {2,0,5,3};
 unsigned char c;
@@ -168,31 +173,41 @@ unsigned char leap_year(unsigned int year){
   return leap;
 }
 
+unsigned char check_lastday(unsigned int year, unsigned char month, unsigned char day){
+  unsigned char aux = lastday_month[month - 1], res = 0;
+  if (year <= 9999 && month <=12) {
+    if(month == 2 && leap_year(year)){
+      aux++;
+    }
+    if(day <= aux && day > 0){
+      res = 1; /*1 means success  0 means fails*/
+    }
+  }
+  return res;
+}
+
 unsigned char specific_day(unsigned int year, unsigned char month, unsigned char day){
   unsigned char dday = doomsday(year), aux = weekday[month-1];
-  if(month==2 || month==1){
-    if (!leap_year(year)){
-      if(day > 28)
-        return (10);      /*date doesn't exist*/
-    }else
+  if(check_lastday(year, month, day)){
+    if(month == 2 && leap_year(year)){
       aux++;
-  }
-  if(day > dday){
-    while (aux < day) {
-      dday++;
-      aux++;
-      if (dday > 6)
-        dday = 0;
     }
-  }
-  else if(day < dday){
-    while (aux > day) {
-      dday--;
-      aux--;
-      if (dday < 0)
-        dday = 6;
-    }
+    if(day > dday){
+      while (aux < day) {
+        dday++;
+        aux++;
+        if (dday > 6)
+          dday = 0;
+      }
+    }else if(day < dday){
+      while (aux > day) {
+        dday--;
+        aux--;
+        if (dday < 0)
+          dday = 6;
+      }
+    }else dday = day;
+      return (dday);
   }else
-    dday=day;
-  return dday;
+    return (10);
 }
