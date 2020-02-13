@@ -6,13 +6,14 @@ void gets(char *str);
 void puts(char *str);
 void itoa(unsigned int number, char *str, unsigned char base);
 unsigned int atoi(char *str);
+
 unsigned char doomsday(unsigned int year);
 unsigned char anchor_day(unsigned int year);
 unsigned int substr(char *str, unsigned char init, unsigned char end);
 unsigned char leap_year(unsigned int year);
 unsigned char check_lastday(unsigned int year, unsigned char month, unsigned char day);
 unsigned char specific_day(unsigned int year, unsigned char month, unsigned char day);
-void clrstr(char *str);
+
 char *day[] = {"Domingo", "Lunes", "Martes", "Miercoles",
                 "Jueves", "Viernes", "Sabado"
               };
@@ -37,7 +38,7 @@ void main ( void ){
     puts("Date: ");
     gets(input);
     cur_day = specific_day(substr(input,6,9),substr(input,3,4),substr(input,0,1));
-    if(cur_day != 10){
+    if(cur_day != 7){
       puts(day[cur_day]);
       putchar(' ');
       itoa(substr(input,0,1),x,10);
@@ -49,14 +50,8 @@ void main ( void ){
       puts(x);
     }else
       puts("Fecha invalida!");
-    clrstr(x);
     putchar('\n');
     getchar();
-  }
-}
-void clrstr(char* str){
-  while (*str) {
-    *(str++) = 0;
   }
 }
 
@@ -187,27 +182,36 @@ unsigned char check_lastday(unsigned int year, unsigned char month, unsigned cha
 }
 
 unsigned char specific_day(unsigned int year, unsigned char month, unsigned char day){
-  unsigned char dday = doomsday(year), aux = weekday[month-1];
-  if(check_lastday(year, month, day)){
+  char dday = doomsday(year);
+  unsigned char aux = weekday[month-1];
+  if(check_lastday(year, month, day))
+  {
     if(month == 2 && leap_year(year)){
       aux++;
     }
-    if(day > dday){
-      while (aux < day) {
-        dday++;
-        aux++;
-        if (dday > 6)
-          dday = 0;
+    if(day != dday){
+      if (day > aux){
+        while (day > aux){
+          dday++;
+          aux++;
+          if (dday > 6){
+            dday = 0;
+          }
+        }
+      }else{
+        while (day < aux) {
+          dday--;
+          aux--;
+          if(dday < 0){
+            dday = 6;
+          }
+        }
       }
-    }else if(day < dday){
-      while (aux > day) {
-        dday--;
-        aux--;
-        if (dday < 0)
-          dday = 6;
-      }
-    }else dday = day;
-      return (dday);
-  }else
-    return (10);
+    }else {
+      dday = day;
+    }
+  }else {
+    dday = 7;
+  }
+  return dday;
 }
