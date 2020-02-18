@@ -1,0 +1,38 @@
+Taller 1 - Aplicación
+
+Múltiples actividades dentro de un programa en ejecución sin el servicio de hilos
+
+Objetivo:  Diseñar e implementar una aplicación donde se requiera hacer múltiples actividades donde no se tiene servicios de procesos ni hilos.
+
+Equipo: Computadora Personal con compilador para lenguaje C.
+
+Teoría: Geometría Analítica (ecuación de la recta).
+
+Descripción: Diseñe e implemente en lenguaje C el juego Ping Pong en modo texto donde el usuario juega contra la computadora. En el diseño se contempla que el juego respete la física correspondiente al rebote de la pelota siguiendo así su dinámica correspondiente.
+
+
+
+Requerimientos:
+
+    La pantalla se trabaja en modo texto (25 renglones x 80 columnas).
+    Los colores a manejar son blanco para el texto y negro para el fondo.
+    Las raquetas está conformadas por 6 caracteres 219 (código ASCII).
+    Las raquetas sólo se mueven a la izquierda y derecha teniendo los topes inicio y final de pantalla.
+    La raqueta de la computadora está en el renglón 1 y la raqueta del usuario está en el renglón 24.
+    La pelota corresponde al carácter 254 (código ASCII).
+    Las teclas para mover la raqueta del usuario son libre a seleccionar por el diseñador.
+    La pelota puede rebotar sólo en las raquetas y en las paredes izquierda y derecha de la pantalla.
+    La computadora nunca deberá perder. 
+
+
+Ajustes:
+Una vez lograda la aplicación con los requerimientos anteriores, realice los ajustes necesarios para lograr que la aplicación (una vez en ejecución) cumple con lo sifuiente:
+
+    Al presionar la tecla 0 la aplicación funciona el modo 0 (modo normal como requerimientos originales).
+    Al presionar la tecla 1 la aplicación entra en modo 1 donde la pelota tiene mayor velocidad.
+    Al presionar la tecla 2 la aplicación entra en modo 2 donde la raqueta del usuario tiene mayor velocidad.
+    Al presionar la tecla 3 la aplicación entra en modo 3 donde la pelota y raqueta del usuario tiene mayor velocidad.
+
+Nota: En todos los casos la mayor velocidad es perceptible visualmente.
+
+Realice las pruebas necesarias para verificar que el software desarrollado cumple con las funcionalidades requeridas.
