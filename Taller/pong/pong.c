@@ -13,9 +13,7 @@ struct item{
     byte_t y;
     byte_t level;
 };
-
 typedef struct item item_t;
-
 /*Function declaration*/
 void startGame(item_t player[3]);
 byte_t getKey(void);
@@ -59,7 +57,6 @@ void setColorAndBackground(int ForgC, int BackC){
 void startGame(item_t player[3]){
     signed char m = 1,left_right = 1;
     while(1){
-        printf("\033[0m");
         level(player);
         gameUpdate(player);
         movePlayer(&player[1]);
