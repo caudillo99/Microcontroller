@@ -5,31 +5,40 @@
 #define PC 0x42
 #define RCtr 0x43
 #define PTOs_all_out 0x80
+#define PA_PB_OUT 0x89
+#define PB_PC_OUT 0x90
+#define PC_PA_OUT 0x82
+
 /*ASM Routines*/
-extern void puts(char *Str);
 extern char getch(void);
+extern void putchar(char c);
 extern BYTE inportb(WORD port);
 extern void outportb(WORD port, BYTE dato);
+extern void clrscr(void);
 /*C functions*/
+void printBin( BYTE dato );
+BYTE getData(void);
+void puts(char *Str);
 void SetBitPort(WORD Puerto, BYTE num_bit);
 void ClrBitPort(WORD Puerto, BYTE num_bit);
 void NotBitPort(WORD Puerto, BYTE num_bit);
 BYTE TstBitPort(WORD Puerto, BYTE num_bit);
 void ReverseBitsPort(WORD Puerto);
-char dato;
+void delay(BYTE time);
+void setOnLed(BYTE Port_ON, BYTE Port_OFF);
+void printLeds(BYTE data);
 
 void main( void ){
-    puts("Practica 5b\n\r"); /* imprimir mensaje */
-    outportb(RCtr, PTOs_all_out); /* inicializar 8255 */
-    outportb(PA,0x55); /* presentar 55h en el Pto A */
+    BYTE data;
     while(1){
-        dato = getch(); /* leer tecla */
-        outportb(PB,dato); /* presentar tecla en PB */
-        printBin(dato);
+        data = getData();
         puts("\n\r");
+        printBin(data);
+        printLeds(data);
+        getch();
+        clrscr();
     }
 }
-/* función simple para desplegar un byte en formato binario */
 void printBin( BYTE dato ){
     BYTE msk=0x80;
     do{
@@ -37,6 +46,33 @@ void printBin( BYTE dato ){
         msk>>=1;
     }while( msk );
 }
+void puts(char *str){
+    while (*str){
+        putchar(*str++);
+    }
+    
+}
+BYTE getData(void){
+    BYTE bits, i, aux;
+    i = bits = 0;
+    outportb(RCtr,0x9B);
+    puts("Captura de bits\n\r\n\r");
+
+    while(i < 8){
+        puts(" Bit ");
+        putchar(i + '0');
+        putchar(':');
+        putchar(' ');
+        getch();
+        aux = TstBitPort(PC,4);
+        bits |= (aux<<i);
+        putchar(aux+'0');
+        puts("\n\r");
+        i++;
+    }
+    return bits;
+}
+
 /*Given a bit number of a specific, set the bit*/
 void SetBitPort(WORD Puerto, BYTE num_bit){
     outportb( Puerto , inportb( Puerto )|( 0x01 << num_bit ) );
@@ -63,5 +99,39 @@ void ReverseBitsPort(WORD Puerto){
         }else 
             ClrBitPort(Puerto, i);
         i++;
+    }
+}
+void delay(BYTE time){
+    while(time--);
+}
+void setOnLed(BYTE Port_ON, BYTE Port_OFF){
+    SetBitPort(Port_ON, 1);
+    SetBitPort(Port_OFF, 1);
+}
+void printLeds(BYTE data){
+    BYTE i = 0, aux;
+    while (1){
+        aux = data & (0x01<<i);
+        if (aux){
+            if(i == 0 || i == 1){
+                outportb(RCtr, PA_PB_OUT);
+                if(i == 1)
+                    setOnLed(PB,PA);
+                else
+                    setOnLed(PA, PB);
+            }else if (i == 2 || i == 3){
+                outportb(RCtr, PB_PC_OUT);
+                if(i == 2)
+                    setOnLed(PC, PB);
+                else
+                    setOnLed(PB, PC);
+            }else{
+                outportb(RCtr, PC_PA_OUT);
+                if(i==4)
+                    setOnLed(PA,PC);
+                else
+                    setOnLed(PC, PA);
+            }delay(1000);
+        }i = ++i % 6;   
     }
 }
