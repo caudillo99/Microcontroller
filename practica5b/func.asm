@@ -1,10 +1,24 @@
 .model tiny
 .code
-    public _getchar
+    public _getch
     public _putchar
     public _inportb
     public _outportb
-    _getchar    PROC
+    public _clrscr
+
+    _clrscr     PROC
+                push bp
+                
+                mov bp,sp
+                mov al,07h
+                mov ah, 05h
+                int 10h
+                
+                pop bp
+                ret
+    _clrscr     ENDP
+
+    _getch      PROC
                 push bp
 
                 mov bp,sp
@@ -14,17 +28,22 @@
 
                 pop bp
                 ret
-    _getchar    ENDP
+    _getch      ENDP
 
     _putchar    PROC
                 push bp
-                mov bp,sp
-                mov dl, [bp+4]
-                mov ah,02h
-                int 21h
+		        push dx
+		        push ax
 
-                pop bp
-                ret
+		        mov bp,sp
+		        mov dl,[bp + 8]
+		        mov ah,02
+		        int 21h
+
+		        pop ax
+		        pop dx
+		        pop bp
+		        ret
     _putchar    ENDP
     
     ;extern void outportb(WORD port, BYTE dato);
