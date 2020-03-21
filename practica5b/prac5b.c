@@ -106,7 +106,7 @@ void delay(BYTE time){
 }
 void setOnLed(BYTE Port_ON, BYTE Port_OFF){
     SetBitPort(Port_ON, 1);
-    SetBitPort(Port_OFF, 1);
+    ClrBitPort(Port_OFF, 1);
 }
 void printLeds(BYTE data){
     BYTE i = 0, aux;
@@ -115,7 +115,7 @@ void printLeds(BYTE data){
         if (aux){
             if(i == 0 || i == 1){
                 outportb(RCtr, PA_PB_OUT);
-                if(i == 1)
+                if(i == 0)
                     setOnLed(PB,PA);
                 else
                     setOnLed(PA, PB);
