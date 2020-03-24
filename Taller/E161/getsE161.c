@@ -26,7 +26,9 @@ keypad_t keyboard[13] = {
 int main(int argc, char const *argv[]){ 
     char str[80] ;
     getsE161(str);
-    puts(">>>Mensaje final<<<");
+    puts(" ");
+    system("cls");
+    puts("*** Mensaje final ***");
     puts(str);
     
     return 0;
