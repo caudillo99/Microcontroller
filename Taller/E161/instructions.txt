@@ -1,0 +1,38 @@
+Diseñe e implemente en lenguaje C función llamada getsE161() para leer una cadena alfanumérica considerando el teclado de la Figura 1. Esta función hace uso de un parámetro para pasar el apuntador a la cadena donde se almacenará la cadena de caracteres capturados.
+
+
+Para la implementación considere que existe los procedimiento getch() y kbhit(), este último verifica el teclado y retorna 0 si no se presionó tecla de lo contrario
+
+Puntos a considerar:
+
+    La captura de la cadena termina cuando se presiona ENTER.
+    La cadena debe terminar el carácter nulo (valor 0).
+    La función kbhit() no elimina la tecla presionada del buffer del teclado, de tal forma que es necesario hacer una llamada a las funciones getchar() o getch() para tomar la tecla que fue presionada.
+
+Necesario hacer una llamada a las funciones getchar() o getch() para tomar la tecla que fue
+presionada.
++-----------------------------+
+|   1    |  2  |   3  |  A    |
+| SPECIAL| ABC |  DEF | ADV   |
+|--------+-----+------+-------|
+|    4   |  5  |   6  |  B    |
+|   GHI  | JKL |  MNO | BK_SP |
+|--------+-----+------+-------+
+|    7   |  8  |  9   |  C    |
+|  PGRS  | TUV | WXYZ | CHANGE|
+|--------+-----+------+-------|
+|    *   |  0  |  #   |   D   |
+|        |     |      | ENTER |
++--------+-----+------+-------+
+
+Forma de uso:
+
+/* función prototipo */
+void getsE161( char *str );
+
+/* str apuntador de la cadena donde se almacenan los caracteres */
+char str[80];
+
+
+/* invocació a la función */
+getsE161( str );

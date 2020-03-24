@@ -34,6 +34,7 @@ void main( void ){
         data = getData();
         puts("\n\r");
         printBin(data);
+        ReverseBitsPort(data);
         printLeds(data);
         getch();
         clrscr();
@@ -131,7 +132,7 @@ void printLeds(BYTE data){
                     setOnLed(PA,PC);
                 else
                     setOnLed(PC, PA);
-            }delay(1000);
+            }delay(10);
         }i = ++i % 6;   
     }
 }

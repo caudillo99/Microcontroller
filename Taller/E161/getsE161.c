@@ -51,9 +51,11 @@ void getsE161(char *str){
             if(toUpper(key) != 'A'){
                 /*Revisa en el arreglo de teclas si se encuentra la tecla pulsada*/
                 for(i = 0; i < 13; i++){
+                    /*En caso de que se haya pulsado la mismca tecla 
+                    mas de una vez, se actualiza el nuevo caracter*/
+                    if(keyboard[i].counter == keyboard[i].qty)
+                        keyboard[i].counter = 0;
                     if(key == keyboard[i].alt[0]){
-                         /*En caso de que se haya pulsado la mismca tecla 
-                        mas de una vez, se actualiza el nuevo caracter*/
                         backspace();
                         c = keyboard[i].alt[keyboard[i].counter];
                         /*imprime en minusculas si la bandera es 0
@@ -65,10 +67,8 @@ void getsE161(char *str){
                             putchar( toUpper(c) );
                             *str = toUpper(keyboard[i].alt[keyboard[i].counter]);
                         }
-                        /*Mientras el contador de caracteres que contiene cada tecla
-                        se menor, se aumenta el contador con el fin de mostrar el 
-                        siguiente caracter. Una vez que llega al maximo se reinicializa a 0*/
-                        keyboard[i].counter += (keyboard[i].counter<keyboard[i].qty)? 1 : -keyboard[i].qty;  
+                        /*Accede al siguiente caracter de la tecla pulsada*/
+                        keyboard[i].counter++;  
                         break; 
                     }
                     switch ( toUpper(key) ){
