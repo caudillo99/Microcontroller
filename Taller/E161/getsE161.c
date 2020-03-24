@@ -8,9 +8,9 @@ Materia:Microcontroladores y microprocesadores
 #include <stdlib.h>
 #define BYTE unsigned char
 struct keypad{
-    BYTE qty;
-    BYTE counter;
-    BYTE alt[5];
+    BYTE qty; /*cantidad de caracteres que tiene la tecla*/
+    BYTE counter; /*contador de la tecla actual*/
+    BYTE alt[5]; /*caracteres alternos que tiene la tecla*/
 };
 typedef struct keypad keypad_t;
 
