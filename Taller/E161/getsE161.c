@@ -1,3 +1,8 @@
+/*
+Alumno:Caudillo Sanchez Diego
+Matricula: 1249199
+Materia:Microcontroladores y microprocesadores
+*/
 #include<stdio.h>
 #include<conio.h>
 #include <stdlib.h>
