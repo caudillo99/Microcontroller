@@ -14,6 +14,7 @@ struct keypad{
 };
 typedef struct keypad keypad_t;
 
+/*Funciones prototipo*/
 void getsE161( char *str );
 BYTE toUpper(BYTE c);
 BYTE toLower(BYTE c);
@@ -35,7 +36,6 @@ int main(int argc, char const *argv[]){
     system("cls");
     puts("*** Mensaje final ***");
     puts(str);
-    
     return 0;
 }
 
@@ -58,15 +58,13 @@ void getsE161(char *str){
             if(toUpper(key) != 'A'){
                 /*Revisa en el arreglo de teclas si se encuentra la tecla pulsada*/
                 for(i = 0; i < 13; i++){
-                    /*En caso de que se haya pulsado la mismca tecla 
-                    mas de una vez, se actualiza el nuevo caracter*/
+                    /*En caso de que se haya pulsado la mismca tecla mas de una vez, se actualiza el nuevo caracter*/
                     if(keyboard[i].counter == keyboard[i].qty)
                         keyboard[i].counter = 0;
                     if(key == keyboard[i].alt[0]){
                         backspace();
                         c = keyboard[i].alt[keyboard[i].counter];
-                        /*imprime en minusculas si la bandera es 0
-                        de lo contrario imprime en mayusculas*/
+                        /*imprime en minusculas si la bandera es 0 de lo contrario imprime en mayusculas*/
                         if(!upper){
                             putchar( toLower(c) );
                             *str = toLower(keyboard[i].alt[keyboard[i].counter]);
@@ -79,15 +77,14 @@ void getsE161(char *str){
                         break; 
                     }
                     switch ( toUpper(key) ){
-                        case 'B':    
-                            *str = 0;
-                            if(str_aux != str)
-                                str--;
-                            break;
-                        case 'C': upper = !upper;
-                            break;
-                        case 'D': key = 13;
-                            break;
+                        case 'B': *str = 0;
+                        if(str_aux != str)
+                            str--;
+                        break;
+                        case 'C': upper = !upper; /*cambia de minuscula a mayusculas y viceversa*/
+                        break;
+                        case 'D': key = 13; /*Equivalente a enter que es el fin del mensaje*/
+                        break;
                     }
                 }
             }else{
@@ -95,7 +92,7 @@ void getsE161(char *str){
                 putchar(' ');
                 str++;
             }
-            aux = key;
+            aux = key; /*se hace un auxiliar con el fin de saber que tecla fue la ultima que se presiono*/
         }
     } while (key != 13);
     *str++ = '\0';
