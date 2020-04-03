@@ -1,18 +1,16 @@
+#include "Timer.h"
 #define INTR 8
-extern void putchar(char c);
-extern void pokeW(unsigned int segment, unsigned int offset, unsigned int value);
-volatile static unsigned char secFlag;
+volatile static BYTE secFlag = 0;
 
 void interrupt ManejadorISR( void ){
-    static unsigned char cont = 0;
+    static BYTE cont = 0;
     cont++; /*ticks counter*/
     if(cont == 20){
         secFlag = 1;
         cont = 0;
     }
 }
-
-unsigned char TimerSecFlag( void ){
+BYTE TimerSecFlag( void ){
     if( secFlag ){
         secFlag = 0;
         return 1;
@@ -22,7 +20,6 @@ unsigned char TimerSecFlag( void ){
 
 void Timer_Ini( void ){
     secFlag = 0;
-    pokeW(0x0, INTR*4, offset de la ISR); /*Determinar offset*/
-    pokeW(0x0, INTR*4+2, _CS);
+    pokeW(0x0, INTR*4, (WORD)ManejadorISR+0x100); /*Determinar offset*/
+    pokeW(0x0, (INTR*4)+2, _CS);
 }
-
