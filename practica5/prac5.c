@@ -1,13 +1,5 @@
 #include "Timer.h"
-/*Declare of Days and months of the year*/
 
-/*Last day of every month*/
-
-
-unsigned char lastday_month[13] = { 31, 28, 31, 30,
-                                  31, 30, 31, 31,
-                                  30, 31, 30, 31
-                                };
 /*Prototype functions*/
 void UpdateClock(void);
 void DisplayClock(void);
