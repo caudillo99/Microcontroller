@@ -1,0 +1,35 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.1.14</VERSION>
+ <DEVICE>ATmega2560</DEVICE>
+ <WORKING_DIR>C:\uPyuC\Microcontroller\practica7\delay</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes</DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:\Program Files (x86)\Atmel\AVR Tools\AvrAssembler2\Appnotes\m2560def.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.map</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <main><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>8</LINE></main>
+  <DELAY1seg><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>47</LINE></DELAY1seg>
+  <DELAY103us><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>12</LINE></DELAY103us>
+  <delay1><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>14</LINE></delay1>
+  <delay2><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>16</LINE></delay2>
+  <DELAY100ms><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>29</LINE></DELAY100ms>
+  <NXT><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>31</LINE></NXT>
+  <NXT2><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>33</LINE></NXT2>
+  <NXT3><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>35</LINE></NXT3>
+  <NEXT><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>49</LINE></NEXT>
+  <NEXT2><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>51</LINE></NEXT2>
+  <NEXT3><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>53</LINE></NEXT3>
+ </LABELS>
+</ASSEMBLER_INFO>
