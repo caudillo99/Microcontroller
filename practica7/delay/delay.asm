@@ -6,8 +6,8 @@
 .def C = R18
 .def D = R19
 main:
-	CALL DELAY1seg
-	ret
+	CALL delay1seg
+		ret
 	
 DELAY103us:
 	LDI A,182
@@ -27,40 +27,44 @@ DELAY103us:
 
 ;******************* Delay 100ms *******************
 DELAY100ms:
-	LDI		A,190
-NXT:
-	LDI 	B,122
+	LDI		A,2
+	NOP
+NXT1:
+	LDI 	B,246
 NXT2:
-	LDI 	C,62
+	LDI 	C,203
 NXT3:
+	LDI 	D,3
+NXT4:
+	DEC 	D
+	NOP
+	BRNE 	NXT4
 	DEC 	C
 	BRNE 	NXT3
 	DEC 	B
 	BRNE 	NXT2
-	DEC 	A
-	BRNE 	NXT
-	NOP
-	NOP
+	DEC		A
+	BRNE	NXT1
 	RET
 
 ;******************* Delay 1seg *******************
-DELAY1seg:
-	LDI		A,255   ;1
-NEXT:
-	LDI 	B,255   ;A
-NEXT2:
-	LDI 	C,62   ;AB
-NEXT3:
-	DEC 	C    ;ABC
-	NOP			 ;ABC
-	BRNE 	NXT3 ;2*(ABC-1)+1 
-	DEC 	B	 ;1*AB
-	BRNE 	NXT2 ;2*(AB-1)+1
-	DEC 	A	 ;1*A
-	BRNE 	NXT	 ;2*(A-1)+1
-	RET			 ;5
-	;5+5+1-3+4A+4AB+4ABC = 16,000,000
-	;4(A+AB+ABC) = 15 999 992
-	; A+AB+ABC = 3 999 998/65281
-	; A(1+B+BC) =
+delay1seg:
+    LDI A, 142
+jmp1:
+    LDI B, 112
+jmp2:
+    LDI C, 167
+jmp3:
+	NOP
+	NOP
+	NOP
+    DEC C
+    BRNE jmp3
+    
+	DEC B
+    BRNE jmp2
+    
+	DEC A
+    BRNE jmp1
 
+    RET

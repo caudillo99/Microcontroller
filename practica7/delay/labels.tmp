@@ -20,16 +20,17 @@
  </OUTPUT_FILES>
  <LABELS>
   <main><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>8</LINE></main>
-  <DELAY1seg><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>47</LINE></DELAY1seg>
+  <delay1seg><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>51</LINE></delay1seg>
   <DELAY103us><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>12</LINE></DELAY103us>
   <delay1><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>14</LINE></delay1>
   <delay2><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>16</LINE></delay2>
   <DELAY100ms><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>29</LINE></DELAY100ms>
-  <NXT><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>31</LINE></NXT>
-  <NXT2><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>33</LINE></NXT2>
-  <NXT3><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>35</LINE></NXT3>
-  <NEXT><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>49</LINE></NEXT>
-  <NEXT2><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>51</LINE></NEXT2>
-  <NEXT3><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>53</LINE></NEXT3>
+  <NXT1><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>32</LINE></NXT1>
+  <NXT2><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>34</LINE></NXT2>
+  <NXT3><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>36</LINE></NXT3>
+  <NXT4><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>38</LINE></NXT4>
+  <jmp1><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>53</LINE></jmp1>
+  <jmp2><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>55</LINE></jmp2>
+  <jmp3><FILE>C:\uPyuC\Microcontroller\practica7\delay\delay.asm</FILE><LINE>57</LINE></jmp3>
  </LABELS>
 </ASSEMBLER_INFO>
