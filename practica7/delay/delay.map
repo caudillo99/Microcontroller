@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.14  C:\uPyuC\Microcontroller\practica7\delay\delay.asm Sun Apr 19 23:50:46 2020
+AVRASM ver. 2.1.14  C:\uPyuC\Microcontroller\practica7\delay\delay.asm Wed Apr 22 19:50:24 2020
 
 
 EQU  SIGNATURE_000 0000001e
@@ -1343,15 +1343,15 @@ DEF  B            r17
 DEF  C            r18
 DEF  D            r19
 CSEG main         00000000
-CSEG delay1seg    0000001c
+CSEG DELAY100ms   0000000d
 CSEG DELAY103us   00000003
 CSEG delay1       00000004
 CSEG delay2       00000005
-CSEG DELAY100ms   0000000d
-CSEG NXT1         0000000f
-CSEG NXT2         00000010
-CSEG NXT3         00000011
-CSEG NXT4         00000012
-CSEG jmp1         0000001d
-CSEG jmp2         0000001e
-CSEG jmp3         0000001f
+CSEG J1           0000000e
+CSEG J2           0000000f
+CSEG J3           00000010
+CSEG delay1seg    0000001a
+CSEG L1           0000001b
+CSEG L2           0000001c
+CSEG L3           0000001d
+CSEG L4           0000001e
