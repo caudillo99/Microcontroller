@@ -6,7 +6,7 @@
 ring_buffer_t input_queue;
 ring_buffer_t output_queue;
 
-/*USART0 Data*/
+/*SIG_USARTx_DATA*/
 ISR(USART_UDRE_vect){
     if(OUTPUT_BUFFER_EMPTY)
         /*Disable Empty Interrupt*/
@@ -24,7 +24,7 @@ ISR(USART_TX_vect){
     }
 }
 
-void UART0_putchar(char data){
+void UART_putchar(char data){
     /*waits to data */
     while (OUTPUT_BUFFER_FULL);
     /*Points to the next position*/
@@ -34,53 +34,53 @@ void UART0_putchar(char data){
     USCR0B |= (1 << UDRIE0); 
 }
 
-void UART0_puts(char *str){
+void UART_puts(char *str){
     while (*str)
-        UART0_putchar(*(str++) );
+        UART_putchar(*(str++) );
 }
 
-uint8_t UART0_available( void ){
+uint8_t UART_available( void ){
     return (!INPUT_BUFFER_EMPTY);
 }
 
-char UART0_getchar( void ){
+char UART_getchar( void ){
     static char aux;
     /*Waiting for Data*/
-    while(!UART0_available());
+    while(!UART_available());
     input_queue.head = (input_queue.head+1) % BUFFER_SIZE;
     aux = input_queue.buffer[input_queue.head];
     /*Print the character (echo)*/
-    UART0_putchar(aux);
+    UART_putchar(aux);
     return aux;
 }
 
-void UART0_gets(char *str){
+void UART_gets(char *str){
     const unsigned char max_size = 20;
     const char *const aux = str;
     static char c;
     
-    c = UART0_getchar();
+    c = UART_getchar();
     while (c != 13){
         if( c != 8){
             if(str < aux + max_size - 1)
                 *(str++) = c;
             else{
-                UART0_putchar(8);
-                UART0_putchar(32);
-                UART0_putchar(8);
+                UART_putchar(8);
+                UART_putchar(32);
+                UART_putchar(8);
             }
         }else{
             if(str == aux)
-                UART0_putchar(32);
+                UART_putchar(32);
             else{
-                UART0_putchar(32);
-                UART0_putchar(c);
+                UART_putchar(32);
+                UART_putchar(c);
                 str--;
             }
         }
-        c = UART0_getchar();
+        c = UART_getchar();
     }
-    UART0_putchar(10); 
+    UART_putchar(10); 
     *str = 0;
 }
 
@@ -94,7 +94,7 @@ void gotoXY(uint8_t x,uint8_t y) {
     str[6] = '0' + x % 10;
     x/=10;
     str[5] = '0' + x %10; 
-    UART0_puts(str);
+    UART_puts(str);
 }
 
 void setColor(uint8_t color){
@@ -109,12 +109,12 @@ void setColor(uint8_t color){
       case CYAN: str[3]   = '6';    break;
       case WHITE: str[3]  = '7';    break;
     }
-    UART0_puts(str);
+    UART_puts(str);
 }
 
 void clr_screen( void ){
-    UART0_puts("\x1b[2J");
-    UART0_puts("\x1b[H");
+    UART_puts("\x1b[2J");
+    UART_puts("\x1b[H");
 }
 
 unsigned int atoi(const char *str){

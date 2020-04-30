@@ -19,11 +19,11 @@ enum color {BLACK = 30,RED,GREEN,YELLOW,BLUE,MANETA,CYAN,WHITE};
 
   /** PROTOTYPES **/
 void UART_init(uint8_t com,uint16_t baud_rate,uint8_t size,uint8_t parity,uint8_t stop);
-void UART0_putchar(char data);
-char UART0_getchar();
-void UART0_puts(char *str);
-void UART0_gets(char *str);
-uint8_t UART0_available();
+void UART_putchar(char data);
+char UART_getchar();
+void UART_puts(char *str);
+void UART_gets(char *str);
+uint8_t UART_available();
 void gotoXY(uint8_t x,uint8_t y);
 void setColor(uint8_t color);
 void clr_screen();
