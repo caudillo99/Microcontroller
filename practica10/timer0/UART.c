@@ -146,7 +146,6 @@ void UART_clrscr(uint8_t com){
   UART_puts(com,"\x1b[H");
 }
 
-
 void UART_init(uint8_t com,uint16_t baud_rate,uint8_t size,uint8_t parity,uint8_t stop){
   uint8_t *base_address;
   base_address = (uint8_t*) 0xc0; /*Addressing UCSR0A*/
@@ -183,10 +182,10 @@ void UART_init(uint8_t com,uint16_t baud_rate,uint8_t size,uint8_t parity,uint8_
   /**setting up parity**/
   *(base_address + 2) &= ~(1<<UPM00) & ~(1<<UPM01);/*UCRxC*/
   switch (parity) {
-    case 1:
+    case 1: /*Odd parity*/
       *(base_address + 2) |= (1<<UPM00) | (1<<UPM01);/*UCRxC*/
       break;
-    case 2:
+    case 2: /*Even parity*/
       *(base_address + 2) |= (1<<UPM01);/*UCRxC*/
       break;
   }
@@ -197,6 +196,7 @@ void UART_init(uint8_t com,uint16_t baud_rate,uint8_t size,uint8_t parity,uint8_
   }
   /**enable rx and UDRIE interrupt  **/
   *(base_address + 1) |= (1<<RXCIE0) | (1<<UDRIE0); /*UCRxB*/
+  
   input_queue.head = 0;
   input_queue.tail = 0;
   output_queue.head = 0;
@@ -212,7 +212,7 @@ unsigned int atoi(const char *str){
       number += aux;
       str++;
       if(*str >= '0' && *str <= '9') {
-              number *= 10;
+        number *= 10;
       }
     }
     else{
@@ -222,7 +222,7 @@ unsigned int atoi(const char *str){
   return number;
 }
 
-void itoa(char *str, unsigned int number, unsigned char base){
+void itoa(char *str, uint64_t number, unsigned char base){
   char *str_start = str;
   char aux;
 

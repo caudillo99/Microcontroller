@@ -28,14 +28,11 @@ void UART_gotoxy(uint8_t com, uint8_t x,uint8_t y);
 void UART_setColor(uint8_t com, uint8_t color);
 void UART_clrscr(uint8_t com);
 unsigned int atoi(const char *str);
-void itoa(char *str, unsigned int number, unsigned char base);
-void UART0_AutoBaudRate( void );
-void UART0_Ini(void);
+void itoa(char *str, uint64_t number, unsigned char base);
+
 
 /**MACRO FUCNTIONS*/
-#define FREQ      16000000
-
-
+#define FREQ 16000000
 #define OUTPUT_BUFFER_FULL ((output_queue.head) == ((output_queue.tail+1) % BUFFER_SIZE))
 #define OUTPUT_BUFFER_EMPTY (output_queue.head == output_queue.tail)
 
