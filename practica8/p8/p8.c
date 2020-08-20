@@ -10,8 +10,9 @@
 #define clrBitPort(port,bit) __asm__("cbi %0,%1" : :"I" ((uint8_t) (_SFR_IO_ADDR(port))) , "I" ((uint8_t) (bit)))
 
 /*Functions headers*/
+void Initial_state( void );
 void led_off(void);
-void delay(uint16_t ms);
+void delay(uint8_t ms);
 void simonSays( void );
 uint8_t randomNumber( uint8_t seed );
 void initPorts( void );
@@ -20,28 +21,34 @@ void TurnOnLED( uint8_t led );
 void winner( void );
 void loser( void );
 void low( void );
+void TurnOnLEDDDDD( uint8_t led );
+
 /*Global variables*/
 uint8_t simonsMemory[SIMON_ACTIONS+1];
 
 /*main program*/
 int main(){
-    uint8_t button;
-    do{
-        button = getButton();
-        winner();   
+    while (1){
+        Initial_state();
+        simonSays();
     }
-    while (button == NOT_PRESSED);
-    TurnOnLED(button);
-    while (1)
-    {
-        /* code */
-    }
-    
     return 0;
 }
 
+void Initial_state( void ){
+    uint8_t button;
+    do{
+        winner();
+        button = getButton();
+    }
+    while (button == NOT_PRESSED);
+    delay(250);
+    delay(250);
+
+}
+
 /*delay function*/
-void delay(uint16_t ms){
+void delay(uint8_t ms){
     uint16_t cnt;
     asm volatile(
         "\n"
@@ -61,27 +68,41 @@ void delay(uint16_t ms){
 /*Simon Say Game*/
 void simonSays( void ){
     uint8_t idx = 0, i, button, win = 1, seed;
-    seed = randomNumber(3);
+    seed = randomNumber(1);
     while ( (idx < SIMON_ACTIONS) && win ){
         simonsMemory[idx] = randomNumber(seed);
         seed = simonsMemory[idx];
         /*Shows the led sequency of Simons memory*/
         for(i = 0; i <= idx; i++){
             TurnOnLED(simonsMemory[i]);
-            delay(1000);
+            delay(250);
+            delay(250);
+            delay(250);
             led_off();
-            delay(100);
+            delay(250);
+            delay(250);
         }
         /*Get the button sequence press by the user*/
         for ( i = 0; i <= idx; i++){
-            button = getButton();
-            /*Waits till press a button*/
-            while (button == NOT_PRESSED){
+            do{
+                delay(20);
                 button = getButton();
-            }
+            } while (button == NOT_PRESSED);
+            TurnOnLED(button);
+            delay(250);
+            delay(250);
+            led_off();
+            delay(250);
             /*If the user pressed the wrong button, a loser led sequence starts blinking*/
             if( button != simonsMemory[i] ){
-                loser();
+                button = NOT_PRESSED;
+                while (button == NOT_PRESSED)
+                {
+                    delay(5);
+                    button = getButton();
+                    loser();
+                }
+                
                 win = 0;
                 break;
             }
@@ -96,9 +117,10 @@ void led_off( void ){
 }
 
 /*Pseudo random number generator*/
-uint8_t randomNumber( uint8_t seed ){
-    uint8_t mod = 8, mult = 2, inc = 1 ;
-    return (((mult*seed)+inc)%mod);
+uint8_t randomNumber( uint8_t x ){
+    /*Xn+1 = (aXn + c) mod m*/
+    uint8_t m = 8, c = 3, a = 1 ;
+    return (( (a*x)+c)%m);
 }
 
 /*Initialize AVR Ports*/
@@ -107,21 +129,17 @@ void initPorts( void ){
     DDK0 = 1 (OUTPUT)   PK0 = 0 (Logic 0)
     DDK1 = 1 (OUTPUT)   PK1 = 0 (Logic 0)
     DDK2 = 1 (OUTPUT)   PK2 = 0 (Logic 0)
-    DDK3 = 0 (INPUT)    PK3 = 1 ()
-    DDK4 = 0 (INPUT)    PK4 = 1 ()
-    DDK5 = 0 (INPUT)    PK5 = 1 ()
+    DDK3 = 0 (INPUT)    PK3 = 1 (Pxn)
+    DDK4 = 0 (INPUT)    PK4 = 1 (Pxn)
+    DDK5 = 0 (INPUT)    PK5 = 1 (Pxn)
     DDK6 = x            PK6 = x 
     DDK7 = x            PK7 = x 
     */
-    DDRK = 0x07;
+    DDRK = (1<<DDK0)|(1<<DDK1)|(1<<DDK2);
     delay(1);
-    PORTK = 0x38;
+    PORTK = (1<<PK5)|(1<<PK4)|(1<<PK3);
 }
 
-/*Get a specific bit from AVR PORTx*/
-uint8_t GetBitPort(uint8_t port, uint8_t bit){
-    return (port & (1 << bit));
-}
 
 /*Get the current button pressed by the user; if no button pressed, return 10*/
 uint8_t getButton( void ){
@@ -129,20 +147,19 @@ uint8_t getButton( void ){
     initPorts();
     uint8_t i,j;
     for ( i = 0; i < ROW; i++){
-        PORTK |= ~(1<<i); /* clear bit*/
-        delay(1);
+        PORTK = ~(1<<i);
+        delay(10);
         for( j = 0; j < COL; j++){
             /*Debido a que mis conexiones del teclado use PK3 a PK5 (columnas) para identificar
             que boton se esta presionando, se hace un offset de 3 (COL) para aseguarme que la mascara solo se
             enfocara en traer los bits del puerto necesarios.*/
-            
             if( !(PINK & (1<<(j+COL))) ){
                 key = (i*ROW)+j;
                 break;
             } 
         }
-        PORTK |= (1<<i); /*set bit */
-        /**/
+        PORTK |= (1<<i); 
+        delay(10);
         if(key != NOT_PRESSED)
             break;
     }
@@ -153,7 +170,7 @@ void TurnOnLED( uint8_t led ){
     uint8_t i = led;
     DDRF = 0x00;
     PORTF = 0x00;
-    if( i < 8){
+    if( i < 8 ){
         if(i == 0 || i == 1){
             DDRF |= (1<<DDF1) | (1<<DDF0);
             if( i == 0 )
@@ -197,15 +214,12 @@ void winner( void ){
 
 void loser( void ){
     /* cambiar led_idx por getkey() dentro del while */
-    TurnOnLED(7);
-    TurnOnLED(6);
-    TurnOnLED(5);
-    TurnOnLED(4);
+    uint8_t led = 0xFF, aux, i=0;
+    aux = led & (1 << i);
+    if( aux ){
+        TurnOnLED(i);
+    }
+    i++;
+    i = i%8;
 }
-void low( void ){
-    TurnOnLED(3);
-    TurnOnLED(2);
-    TurnOnLED(1);
-    TurnOnLED(0);
 
-}
