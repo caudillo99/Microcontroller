@@ -67,3 +67,12 @@ void Init_PortB( void ){
    DDRB = 0x37;
    PORTB = 0x20;
 }
+
+uint8_t *dport;
+uint8_t dD, dS0,dS1,dS2,dG;
+
+//prototipo wrbit()
+static void wrbit(uint8_t nbit, uint8_t dbit){
+    if( dbit)
+        *dport |= (1<<nbit)
+}
